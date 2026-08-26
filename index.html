@@ -274,7 +274,10 @@
                         <span class="flex h-8 w-8 items-center justify-center rounded-[10px] bg-neutral-200 text-[11px] font-semibold text-neutral-600" x-text="t.symbol.slice(1, 2)"></span>
                       </template>
                     </span>
-                    <span class="text-[15px] text-neutral-900" :title="t.name" x-text="t.symbol"></span>
+                    <span class="flex flex-col leading-[1.25]">
+                      <span class="text-[15px] text-neutral-900" x-text="t.name"></span>
+                      <span class="text-[12px] text-neutral-400" x-text="t.symbol"></span>
+                    </span>
                   </div>
                 </td>
 
@@ -446,7 +449,7 @@ function registry() {
 
     columns: [
       { key: 'name',       label: 'Name',             align: 'left'  },
-      { key: 'tvs',        label: 'TVS',              align: 'right' },
+      { key: 'tvs',        label: 'Shielded TVL',     align: 'right' },
       { key: 'holders',    label: 'Holders',          align: 'right' },
       { key: 'shielded',   label: 'Total Shielded',   align: 'right' },
       { key: 'unshielded', label: 'Total Unshielded', align: 'right' },
@@ -620,7 +623,7 @@ function registry() {
       const dir = this.sortDir === 'asc' ? 1 : -1;
       const key = this.sortKey;
       const valueOf = t => {
-        if (key === 'name') return t.symbol.toLowerCase();
+        if (key === 'name') return t.name.toLowerCase();
         if (key === 'contract') return t.address.toLowerCase();
         const m = this.metricsFor(t.symbol);
         if (!m) return -Infinity;          // rows without data sink to the bottom
