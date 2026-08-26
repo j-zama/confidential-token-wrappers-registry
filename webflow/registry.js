@@ -386,14 +386,13 @@
 
     html += '</tbody></table></div></div>';
 
-    html += '<div class="ctr-status"><span>' +
-      (state.loadState === 'loading' ? 'Loading live metrics…' : '') +
-      (state.loadState === 'ready' && state.updatedAt ? 'Live data · updated ' + esc(state.updatedAt) : '') +
-      '</span>' +
-      (state.loadState === 'error'
-        ? '<button class="ctr-retry" type="button" data-ctr="retry">Live metrics unavailable — retry</button>'
-        : '') +
-    '</div>';
+    // Nothing is shown on success — only a retry affordance if the API failed,
+    // since a table of dashes with no explanation is worse than a message.
+    if (state.loadState === 'error') {
+      html += '<div class="ctr-status"><span></span>' +
+        '<button class="ctr-retry" type="button" data-ctr="retry">Live metrics unavailable — retry</button>' +
+      '</div>';
+    }
 
     root.className = state.loadState === 'loading' ? 'ctr-loading' : '';
     root.innerHTML = html;
