@@ -55,7 +55,7 @@
 
   var COLUMNS = [
     { key: 'name',       label: 'Name',             align: 'left'  },
-    { key: 'tvs',        label: 'TVS',              align: 'right' },
+    { key: 'tvs',        label: 'Shielded TVL',     align: 'right' },
     { key: 'holders',    label: 'Holders',          align: 'right' },
     { key: 'shielded',   label: 'Total Shielded',   align: 'right' },
     { key: 'unshielded', label: 'Total Unshielded', align: 'right' },
@@ -86,6 +86,10 @@
     '  --ctr-up:#047857; --ctr-down:#be123c; --ctr-surface:#ffffff; --ctr-control:#ffffff;',
     '  font-family:inherit; font-size:16px; color:var(--ctr-ink); text-align:left;',
     '  line-height:1.4; -webkit-font-smoothing:antialiased;',
+    /* fill whatever Webflow gives us: display:block alone would shrink to
+       content inside a row-flex parent, and min-width:0 stops a flex item
+       refusing to shrink below its content and blowing out the layout */
+    '  display:block; width:100%; max-width:100%; min-width:0;',
     '}',
 
     /* element resets, scoped — undo whatever the host page imposes */
@@ -176,9 +180,11 @@
     M + '.ctr-table td:first-child{padding-left:16px;}',
     M + '.ctr-table td:last-child{padding-right:16px;}',
     M + '.ctr-name{display:flex;align-items:center;gap:12px;}',
+    M + '.ctr-id{display:flex;flex-direction:column;line-height:1.25;}',
     M + '.ctr-logo{width:38px;height:32px;display:flex;align-items:center;flex:none;}',
     M + '.ctr-logo img{height:32px;width:auto;display:block;}',
-    M + '.ctr-sym{font-size:15px;color:var(--ctr-ink);}',
+    M + '.ctr-full{font-size:15px;color:var(--ctr-ink);}',
+    M + '.ctr-sym{font-size:12px;color:var(--ctr-faint);}',
     M + '.ctr-r{text-align:right;}',
     M + '.ctr-v{font-size:15px;font-weight:600;}',
     M + '.ctr-v.up{color:var(--ctr-up);}',
@@ -268,7 +274,7 @@
     });
   }
   function valueOf(t, key) {
-    if (key === 'name') return t.symbol.toLowerCase();
+    if (key === 'name') return t.name.toLowerCase();
     if (key === 'contract') return t.address.toLowerCase();
     var m = metrics(t.symbol);
     if (!m) return -Infinity;
@@ -358,7 +364,8 @@
         return '<tr>' +
           '<td><div class="ctr-name">' +
             '<span class="ctr-logo"><img src="' + LOGO_BASE + t.logo + '" alt=""></span>' +
-            '<span class="ctr-sym" title="' + esc(t.name) + '">' + esc(t.symbol) + '</span>' +
+            '<span class="ctr-id"><span class="ctr-full">' + esc(t.name) + '</span>' +
+            '<span class="ctr-sym">' + esc(t.symbol) + '</span></span>' +
           '</div></td>' +
           '<td class="ctr-r">' + (m ? cell(usd(m.tvsUsd), num(m.tvsTok)) : '<span class="ctr-none">—</span>') + '</td>' +
           '<td class="ctr-r">' + (m ? '<span class="ctr-num ctr-v">' + int(m.holders) + '</span>' : '<span class="ctr-none">—</span>') + '</td>' +
