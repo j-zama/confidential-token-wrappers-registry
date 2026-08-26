@@ -186,6 +186,7 @@
     M + '.ctr-full{font-size:15px;color:var(--ctr-ink);}',
     M + '.ctr-sym{font-size:12px;color:var(--ctr-faint);}',
     M + '.ctr-r{text-align:right;}',
+    M + 'td.ctr-r > .ctr-addr{margin-left:auto;}',
     M + '.ctr-v{font-size:15px;font-weight:600;}',
     M + '.ctr-v.up{color:var(--ctr-up);}',
     M + '.ctr-v.down{color:var(--ctr-down);}',
@@ -194,7 +195,12 @@
     M + '.ctr-loading .ctr-none{animation:ctr-pulse 1.6s ease-in-out infinite;}',
     '@keyframes ctr-pulse{0%,100%{opacity:1}50%{opacity:.4}}',
     '@media(prefers-reduced-motion:reduce){' + M + '.ctr-loading .ctr-none{animation:none;}}',
-    M + '.ctr-addr{display:inline-flex;align-items:center;gap:8px;color:#404040;font-size:14px;transition:color .15s;}',
+    /* Right-alignment must not depend on the cell's text-align: a host rule that
+       forces `a` to display:flex/block turns this into a block-level box that
+       fills the cell and drops its content to the left. inline-flex keeps the
+       normal case; justify-content + margin-left:auto cover the forced case. */
+    M + '.ctr-addr{display:inline-flex !important;align-items:center;gap:8px;color:#404040;',
+    '  font-size:14px;justify-content:flex-end;margin-left:auto;width:auto;transition:color .15s;}',
     M + '.ctr-addr:hover{color:var(--ctr-ink);}',
     M + '.ctr-addr-ico{color:var(--ctr-faint);transition:color .15s;}',
     M + '.ctr-addr:hover .ctr-addr-ico{color:var(--ctr-ink);}',
